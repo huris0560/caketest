@@ -1,17 +1,17 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Client Model
+ * DUser Model
  *
  */
-class Client extends AppModel {
+class DUser extends AppModel {
 
 /**
- * Use database config
+ * Use table
  *
- * @var string
+ * @var mixed False or table name
  */
-	public $useDbConfig = 'myaon_db';
+	public $useTable = 'd_user';
 
 /**
  * Primary key field
