@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 /**
  * Admin Model
  *
@@ -34,7 +35,9 @@ class Admin extends AppModel {
 		),
 		'baces' => array(
 			'notBlank' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('inList', array("public",'factry', 'reception')),
+                'message' => 'Please enter a valid role',
+                'allowEmpty' => false
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -53,4 +56,16 @@ class Admin extends AppModel {
 			),
 		),
 	);
+	public function beforeSave($options = array()) {
+		if (isset($this->data[$this->alias]['password'])) {
+			$passwordHasher = new BlowfishPasswordHasher();
+			$this->data[$this->alias]['password'] = $passwordHasher->hash(
+					$this->data[$this->alias]['password']
+					);
+		}
+		return true;
+	}
+	public function isOwnedBy($post, $user) {
+		return $this->field('id', array('id' => $post, 'admin_id' => $user)) !== false;
+	}
 }
