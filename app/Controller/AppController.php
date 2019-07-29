@@ -35,10 +35,10 @@ class AppController extends Controller {
 	//...
 
 	public $components = array(
-			'Flash',
-			'Auth' => array(
+			'Session',
+			'Auth' => array(//認証設定
 					'loginRedirect' => array(
-							'controller' => 'posts',
+							'controller' => 'admins',
 							'action' => 'index'
 					),
 					'logoutRedirect' => array(
@@ -48,20 +48,27 @@ class AppController extends Controller {
 					),
 					'authenticate' => array(
 							'Form' => array(
-									'passwordHasher' => 'Blowfish'
+									'userModel' => 'Admin',
+									'passwordHasher' => 'Blowfish',
+									'fields'=>array(
+											'username' => 'admin_name',
+											'password' => 'password'
+									)
 							)
+					),
+					'loginAction' => array(
+							'action' => 'login'
 					),
 					'authorize' => array('Controller')
 			)
 	);
 
-	public function isAuthorized($admin) {
+	public function isAuthorized($user) {
 		// Admin can access every action
-		if (isset($admin['role']) && $admin['role'] === 'admin') {
+		if (isset($user['role']) && $user['role'] === 'admin') {
 			return true;
 		}
-
-		// デフォルトは拒否
+	//デフォルトは拒否
 		return false;
 	}
 
