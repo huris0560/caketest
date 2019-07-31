@@ -4,7 +4,7 @@
 	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('admin_name'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('password'); ?></th>
 			<th><?php echo $this->Paginator->sort('baces'); ?></th>
 			<th><?php echo $this->Paginator->sort('ip'); ?></th>
@@ -15,7 +15,7 @@
 	<?php foreach ($admins as $admin): ?>
 	<tr>
 		<td><?php echo h($admin['Admin']['id']); ?>&nbsp;</td>
-		<td><?php echo h($admin['Admin']['admin_name']); ?>&nbsp;</td>
+		<td><?php echo h($admin['Admin']['name']); ?>&nbsp;</td>
 		<td><?php echo h($admin['Admin']['password']); ?>&nbsp;</td>
 		<td><?php echo h($admin['Admin']['baces']); ?>&nbsp;</td>
 		<td><?php echo h($admin['Admin']['ip']); ?>&nbsp;</td>
@@ -47,4 +47,8 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('New Admin'), array('action' => 'add')); ?></li>
 	</ul>
+	<ul>
+		<li><?php echo $this->Html->link(__('Login'), array('action' => 'login')); ?></li>
+	</ul>
+
 </div>

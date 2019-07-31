@@ -145,23 +145,24 @@ class AdminsController extends AppController {
  * @return void
  */
 
-	public function delete($id = null) {
-		// Prior to 2.5 use
-		// $this->request->onlyAllow('post');
+    public function delete($id = null) {
+        // Prior to 2.5 use
+        // $this->request->onlyAllow('post');
 
-		$this->request->allowMethod('post');
+        $this->request->allowMethod('post');
 
-		$this->Admin->id = $id;
-		if (!$this->Admin->exists()) {
-			throw new NotFoundException(__('Invalid admin'));
-		}
-		if ($this->Admin->delete()) {
-			$this->Flash->success(__('Admin deleted'));
-			return $this->redirect(array('action' => 'index'));
-		}
-		$this->Flash->error(__('Admin was not deleted'));
-		return $this->redirect(array('action' => 'index'));
-	}
+        $this->Admin->id = $id;
+        if (!$this->Admin->exists()) {
+            throw new NotFoundException(__('Invalid user'));
+        }
+        if ($this->Admin->delete()) {
+            $this->Flash->success(__('User deleted'));
+            return $this->redirect(array('action' => 'index'));
+        }
+        $this->Flash->error(__('User was not deleted'));
+        return $this->redirect(array('action' => 'index'));
+    }
+
 	public function login() {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
