@@ -7,20 +7,69 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class AdminsController extends AppController {
+	public $components = array(//'temp');
+			'Flash',
+			'Auth' => array(//認証設定
+					'loginRedirect' => array(
+							'controller' => 'admins',
+							'action' => 'index'
+					),
+					'logoutRedirect' => array(
+							'controller' => 'pages',
+							'action' => 'display',
+							'home'
+					),
+					'authenticate' => array(
+							'Form' => array(
+									'userModel' => 'Admin',
+									'passwordHasher' => 'Blowfish',
+									'fields'=>array(
+											'username' => 'name',
+											'password' => 'password'
+									)
+							)
+					),
+					'loginAction' => array(
+							'action' => 'login'
+					),
+					'authorize' => array('Controller')
+			),
+			'Paginator'
+	);
 
 
 	public function beforeFilter() {
 		parent::beforeFilter();
+//		$this->Auth->authorize = array('controller');
 		// ユーザー自身による登録とログアウトを許可する
 		$this->Auth->allow('add', 'logout');
-		$this->Auth->authenticate = array(
-				'Basic' => array('userModel' => 'Admin'),
-				'Form' => array('userModel' => 'Admin')
-		);
+//		$this->Auth->loginAction = array(
+//				'controller' => 'admins',
+//				'action' => 'login'
+//		);
+//		$this->Auth->loginRedirect = array(
+//				'controller' => 'admins',
+//				'action' => 'index'
+//		);
+//		$this->Auth->logoutRedirect = array(
+//				'controller' => 'admins',
+//				'action' => 'add'//ページ遷移がわかりやすいように一度addに移動
+//		);
+
+//		$this->Auth->authenticate = array(
+//					'Form' => array(
+//					'passwordHasher' => 'Blowfish'
+//			)
+//		);
+
+//		$this->Auth->allow('add', 'logout');
+//		$this->Auth->authenticate = array(
+//				'Basic' => array('userModel' => 'Admin'),
+//				'Form' => array('userModel' => 'Admin')
+//		);
 	}
 
-
-	public function isAuthorized($admin) {
+	public function isAuthorized($user) {
 		// 登録済ユーザーは投稿できる
 		if ($this->action === 'add') {
 			return true;
@@ -29,12 +78,12 @@ class AdminsController extends AppController {
 		// 投稿のオーナーは編集や削除ができる
 		if (in_array($this->action, array('edit', 'delete'))) {
 			$postId = (int) $this->request->params['pass'][0];
-			if ($this->Post->isOwnedBy($postId, $admin['id'])) {
+			if ($this->Post->isOwnedBy($postId, $user['id'])) {
 				return true;
 			}
 		}
 
-		return parent::isAuthorized($admin);
+		return parent::isAuthorized($user);
 	}
 
 /**
@@ -42,7 +91,7 @@ class AdminsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+// component2重回避　public $components = array('Paginator');
 
 /**
  * index method
@@ -88,7 +137,6 @@ class AdminsController extends AppController {
 		}
 	}
 
-
 /**
  * edit method
  *
@@ -129,7 +177,7 @@ class AdminsController extends AppController {
 				$this->Flash->error(__('The user could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Admin.' . $this->User->primaryKey => $id));
+			$options = array('conditions' => array('Admin.' . $this->Admin->primaryKey => $id));
 			$this->request->data = $this->Admin->find('first', $options);
 		}
 		$admin = $this->Admin->Admin->find('list');
@@ -168,7 +216,7 @@ class AdminsController extends AppController {
 			if ($this->Auth->login()) {
 				$this->redirect($this->Auth->redirect());
 			} else {
-				$this->Flash->error(__('Invalid adminname or password, try again'));
+				$this->Flash->error(__('管理者名かPW間違い'));
 			}
 		}
 	}

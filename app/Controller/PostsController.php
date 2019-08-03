@@ -19,16 +19,7 @@ class PostsController extends AppController {
         $this->set('post', $post);
     }
 
-    public function add() {
-        if ($this->request->is('post')) {
-            $this->Post->create();
-            if ($this->Post->save($this->request->data)) {
-                $this->Flash->success(__('Your post has been saved.'));
-                return $this->redirect(array('action' => 'index'));
-            }
-            $this->Flash->error(__('Unable to add your post.'));
-        }
-    }
+
 	public function add() {
     	if ($this->request->is('post')) {
     		//Added this line

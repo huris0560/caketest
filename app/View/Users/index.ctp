@@ -47,6 +47,12 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('New Admin'), array('action' => 'add')); ?></li>
+	</ul>
+	<ul>
+		<li><?php echo $this->Html->link(__('Login'), array('action' => 'login')); ?></li>
+	</ul>
+	<ul>
+		<li><?php echo $this->Html->link(__('Logout'), array('action' => 'logout')); ?></li>
 	</ul>
 </div>

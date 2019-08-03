@@ -50,5 +50,8 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('Login'), array('action' => 'login')); ?></li>
 	</ul>
+	<ul>
+		<li><?php echo $this->Html->link(__('Logout'), array('action' => 'logout')); ?></li>
+	</ul>
 
 </div>

@@ -4,7 +4,7 @@
 		<legend><?php echo __('Edit Admin'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('admin_name');
+		echo $this->Form->input('name');
 		echo $this->Form->input('password');
 		echo $this->Form->input('baces');
 		echo $this->Form->input('ip');

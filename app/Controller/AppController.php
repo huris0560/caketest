@@ -1,4 +1,5 @@
 <?php
+App::uses('Controller', 'Controller');
 // app/Controller/AppController.php
 class AppController extends Controller {
     //...
@@ -11,8 +12,8 @@ class AppController extends Controller {
                 'action' => 'index'
             ),
             'logoutRedirect' => array(
-                'controller' => 'pages',
-                'action' => 'display',
+                'controller' => 'users',
+                'action' => 'add',//ページ遷移がわかりやすいように一度addに移動
                 'home'
             ),
             'authenticate' => array(
@@ -20,7 +21,7 @@ class AppController extends Controller {
                     'passwordHasher' => 'Blowfish'
                 )
             ),
-		'authorize' => array('Controller') // この行を追加しました
+		'authorize' => array('Controller')
         )
     );
 
