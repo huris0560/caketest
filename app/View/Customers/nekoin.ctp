@@ -7,14 +7,13 @@
 		</legend>
 		<?php echo $this->Form->input('username');
 			echo $this->Form->input('password');
-
 		?>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
-			<?php echo h($customer['0']['Customer']['id']); ?>
+			<?php //echo h($customer['0']['Customer']['id']); ?>
 			<?php // var_dump($customer); ?>
-			<?php print_r($customer); ?>
+			<?php //print_r($customer); ?>
 		</dd>
-		</fieldset>
+	</fieldset>
 <?php echo $this->Form->end(__('Nekoin')); ?>
 </div>

@@ -1,5 +1,8 @@
 <?php
 App::uses('AppModel', 'Model');
+//App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
+App::uses('AbstractPasswordHasher', 'Controller/Component/Auth');
+
 /**
  * Customer Model
  *
@@ -50,4 +53,15 @@ class Customer extends AppModel {
 			),
 		),
 	);
+	public function beforeSave($options = array()) {
+//ふぐは忘れろ
+		if (isset($this->data[$this->alias]['password'])) {
+			$temp = $this->data[$this->alias]['password'];
+			$this->data[$this->alias]['password'] =  Security::hash($temp,'sha256',true);
+			//			$passwordHasher = new BlowfishPasswordHasher();
+			//			Security::setHash('blowfish');
+			//			$this->data[$this->alias]['password'] =  $this->data[$this->alias]['password'];
+		}
+		return true;
+	}
 }

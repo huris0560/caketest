@@ -41,7 +41,7 @@ class CustomersController extends AppController {
 			$this->Session->write('Neko.authLongin', 'in');
 			$this->Session->write('Neko.authTime', time());
 			$this->Session->write('Neko.authTimeOut', time()+1800);
-		}else {//予期せぬエラーでログイン画面へ
+		}else {//予期せぬエラーでログイン画面へ遷移（基本ここには入らない筈)
 			$this->redirect(array(
 					'controller' => 'Customers',
 					'action' => 'login'
@@ -57,18 +57,39 @@ class CustomersController extends AppController {
 	 * @var array
 	 */
 	public function nekoin(){
+
+		$sha256 = Security::hash('CakePHP Framework', 'sha256', true);
+		$newHash = Security::hash('nyanko','sha256',true);
+
+		$username = $this->request->data('Customer.username');
+		$password = $this->request->data('Customer.password');
+
+		$test01 = "nyanko";
+		echo "test6をハッシュ化すると[ ".$newHash."<br>";
+		echo "Security::hash('nyanko','sha256',true);を討ってる　".Security::hash('nyanko','sha256',true)."<br>";
+		echo "Security::hash($test01,'sha256',true);を討ってる　".Security::hash($test01,'sha256',true)."<br>";
+
+		$pass = $this->Customer->find('all', array('conditions' => array('customer_name' => $username)));
+		$pass2 = $pass['0']['Customer']['password'];
+		echo $username . "でデータベースから取り出してハッシュ化しない生値として読む ".$pass2."<br>";
+		echo "POSTしたPWのハッシュ化 ".Security::hash($password,'sha256',true)."<br>";
+		echo "POSTしたPWのハッシュ化 ".Security::hash($this->request->data('Customer.password'),'sha256',true)."<br>";
+		echo "POSTしたPW ".$password ."<br>";
+
+
+			//		var_dump($this->Customer->find('all', array('conditions' => array('customer_name'=>'testman2'))));
 	}
 	public function login(){
-//		var_dump($this->Customer->find('all', array('conditions' => array('customer_name'=>'testman2'))));
 		if ($this->request->is('post')) {//自分にポストが来た
 			$username = $this->request->data('Customer.username');//POST受領
 			$password = $this->request->data('Customer.password');
+			$nekoHash = Security::hash($password,'sha256',true);
 			$PW = $this->Customer->find('all', array('conditions' => array('customer_name'=>$username)));
 			if(empty($PW)){
 				$this->Flash->error(__('IDか両方違う(確認用、メッセージは修正せよ)'));//Flashでメッセージを表示するだけ
 				return 0;
 			}
-			if ($password == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
+			if ($nekoHash == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
 				$this->Session->write('Neko.authLongin', 'in');
 				$this->Session->write('Neko.authTime', time());
 				$this->Session->write('Neko.authTimeOut', time()+1800);
@@ -81,8 +102,6 @@ class CustomersController extends AppController {
 				$this->Flash->error(__('PWが違います(確認用、メッセージは修正せよ)'));//Flashでメッセージを表示するだけ
 			}
 		}
-//		$this->set('customer', $this->Customer->find('all'));
-//		$this->set('customers', $this->Paginator->paginate());
 	}
 
 	public function logout() {
