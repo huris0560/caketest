@@ -55,4 +55,7 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('Login'), array('controller' => 'Customers','action' => 'login')); ?></li>
 	</ul>
+	<ul>
+		<li><?php echo $this->Html->link(__('Logout'), array('controller' => 'Customers','action' => 'Logout')); ?></li>
+	</ul>
 </div>

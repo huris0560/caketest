@@ -28,7 +28,7 @@ class CustomersController extends AppController {
 				'controller' => 'Customers',
 				'action' => 'login'
 			));
-		}elseif ($neko_auth_timeout < $now){//$neko_auth_time == time()){前回のログインアクセスから30分以上たっていたらログアウトに書き換えてログイン画面へ
+		}elseif ($neko_auth_timeout < $now){//前回のログインアクセスから30分以上たっていたらログアウトに書き換えてログイン画面へ
 			$this->Session->write('Neko.authLongin', 'out');
 			$this->Session->write('Neko.authTime', '');
 			$this->Session->write('Neko.authTimeOut', '');
@@ -75,9 +75,6 @@ class CustomersController extends AppController {
 		echo "POSTしたPWのハッシュ化 ".Security::hash($password,'sha256',true)."<br>";
 		echo "POSTしたPWのハッシュ化 ".Security::hash($this->request->data('Customer.password'),'sha256',true)."<br>";
 		echo "POSTしたPW ".$password ."<br>";
-
-
-			//		var_dump($this->Customer->find('all', array('conditions' => array('customer_name'=>'testman2'))));
 	}
 	public function login(){
 		if ($this->request->is('post')) {//自分にポストが来た
@@ -89,6 +86,7 @@ class CustomersController extends AppController {
 				$this->Flash->error(__('IDか両方違う(確認用、メッセージは修正せよ)'));//Flashでメッセージを表示するだけ
 				return 0;
 			}
+
 			if ($nekoHash == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
 				$this->Session->write('Neko.authLongin', 'in');
 				$this->Session->write('Neko.authTime', time());
