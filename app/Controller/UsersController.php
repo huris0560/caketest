@@ -7,7 +7,7 @@ class UsersController extends AppController {
 public function beforeFilter() {
     parent::beforeFilter();
     // ユーザー自身による登録とログアウトを許可する
-    $this->Auth->allow('add', 'logout');
+//    $this->Auth->allow('add', 'logout');
 }
 
 public function login() {
@@ -21,7 +21,10 @@ public function login() {
 }
 
 public function logout() {
-    $this->redirect($this->Auth->logout());
+	if ($this->Auth->logout()) {
+		$this->Flash->success(__('You have successfully logged out.'));
+		return $this->redirect(array('action' => 'index'));
+	}
 }
 
     public function index() {

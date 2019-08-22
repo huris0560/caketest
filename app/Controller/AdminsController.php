@@ -7,42 +7,42 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class AdminsController extends AppController {
-	public $components = array(//'temp');
-			'Flash',
-			'Auth' => array(//認証設定
-					'loginRedirect' => array(
-							'controller' => 'admins',
-							'action' => 'index'
-					),
-					'logoutRedirect' => array(
-							'controller' => 'pages',
-							'action' => 'display',
-							'home'
-					),
-					'authenticate' => array(
-							'Form' => array(
-									'userModel' => 'Admin',
-									'passwordHasher' => 'Blowfish',
-									'fields'=>array(
-											'username' => 'name',
-											'password' => 'password'
-									)
-							)
-					),
-					'loginAction' => array(
-							'action' => 'login'
-					),
-					'authorize' => array('Controller')
-			),
-			'Paginator'
-	);
+//	public $components = array(//'temp');
+//			'Flash',
+//			'Auth' => array(//認証設定
+//					'loginRedirect' => array(
+//							'controller' => 'admins',
+//							'action' => 'index'
+//					),
+//					'logoutRedirect' => array(
+//							'controller' => 'pages',
+//							'action' => 'display',
+//							'home'
+//					),
+//					'authenticate' => array(
+//							'Form' => array(
+//									'userModel' => 'Admin',
+//									'passwordHasher' => 'Blowfish',
+//									'fields'=>array(
+//											'username' => 'name',
+//											'password' => 'password'
+//									)
+//							)
+//					),
+//					'loginAction' => array(
+//							'action' => 'login'
+//					),
+//					'authorize' => array('Controller')
+//			),
+//			'Paginator'
+//	);
 
 
 	public function beforeFilter() {
 		parent::beforeFilter();
 //		$this->Auth->authorize = array('controller');
 		// ユーザー自身による登録とログアウトを許可する
-		$this->Auth->allow('add', 'logout');
+//		$this->Auth->allow('add', 'logout');
 //		$this->Auth->loginAction = array(
 //				'controller' => 'admins',
 //				'action' => 'login'
@@ -69,22 +69,22 @@ class AdminsController extends AppController {
 //		);
 	}
 
-	public function isAuthorized($user) {
-		// 登録済ユーザーは投稿できる
-		if ($this->action === 'add') {
-			return true;
-		}
+//	public function isAuthorized($user) {
+//		// 登録済ユーザーは投稿できる
+//		if ($this->action === 'add') {
+//			return true;
+//		}
 
 		// 投稿のオーナーは編集や削除ができる
-		if (in_array($this->action, array('edit', 'delete'))) {
-			$postId = (int) $this->request->params['pass'][0];
-			if ($this->Post->isOwnedBy($postId, $user['id'])) {
-				return true;
-			}
-		}
+//		if (in_array($this->action, array('edit', 'delete'))) {
+//			$postId = (int) $this->request->params['pass'][0];
+//			if ($this->Post->isOwnedBy($postId, $user['id'])) {
+//				return true;
+//			}
+//		}
 
-		return parent::isAuthorized($user);
-	}
+//		return parent::isAuthorized($user);
+//	}
 
 /**
  * Components

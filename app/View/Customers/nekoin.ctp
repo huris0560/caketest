@@ -3,7 +3,7 @@
 <?php echo $this->Form->create('Customer'); ?>
 	<fieldset>
 		<legend>
-			<?php echo __('Please enter your username and password'); ?>
+			<?php echo __('ここはテスト場です。自身に向けて下記内容をPOSTします。'); ?>
 		</legend>
 		<?php echo $this->Form->input('username');
 			echo $this->Form->input('password');

@@ -1,6 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
-App::uses('AbstractPasswordHasher', 'Controller/Component/Auth');
+//App::uses('AbstractPasswordHasher', 'Controller/Component/Auth');
 
 /**
  * Customer Model
@@ -54,8 +54,8 @@ class Customer extends AppModel {
 	);
 	public function beforeSave($options = array()) {
 		if (isset($this->data[$this->alias]['password'])) {
-			$temp = $this->data[$this->alias]['password'];
-			$this->data[$this->alias]['password'] =  Security::hash($temp,'sha256',true);
+			$PWhash= $this->data[$this->alias]['password'];
+			$this->data[$this->alias]['password'] =  Security::hash($PWhash,'sha256',true);
 		}
 		return true;
 	}
