@@ -17,39 +17,39 @@ class CustomersController extends AppController {
 
 	function beforeRender() {
 //neko_authのinとoutを確認
-//		$neko_auth_login = $this->Session->read('Neko.authLongin');
-//		$neko_auth_time = $this->Session->read('Neko.authTime');
-//		$neko_auth_timeout = $this->Session->read('Neko.authTimeOut');
-//		$now = time();
-//		if($this->action =='login'){
-//			return 0;
-//		}
-//		elseif($neko_auth_login != 'in'){//ログイン状態がinではない場合ログイン画面へ遷移
-//			$this->redirect(array(
-//				'controller' => 'Customers',
-//				'action' => 'login'
-//			));
-//		}elseif ($neko_auth_timeout < $now){//前回のログインアクセスから30分以上たっていたらログアウトに書き換えてログイン画面へ
-//			$this->Session->write('Neko.authLongin', 'out');
-//			$this->Session->write('Neko.authTime', '');
-//			$this->Session->write('Neko.authT
-//					imeOut', '');
-//			$this->Flash->error(__('前回のアクセスから一定時間が経過しました。再度ログインしてください。'));//
-//			$this->redirect(array(
-//				'controller' => 'Customers',
-//				'action' => 'login'
-//			));
-//		}elseif ($neko_auth_timeout > $now){//ログイン状態かつタイムアウトではない→ログイン時間更新のみ
-//			$this->Session->write('Neko.authLongin', 'in');
-//			$this->Session->write('Neko.authTime', time());
-//			$this->Session->write('Neko.authTimeOut', time()+1800);
-//		}else {//予期せぬエラーでログイン画面へ遷移（基本ここには入らない筈)
-//			$this->redirect(array(
-//					'controller' => 'Customers',
-//					'action' => 'login'
-//			));
-//			$this->Flash->error(__('予期せぬエラーが発生しました。再度ログインしてください。'));//
-//		}
+		$neko_auth_login = $this->Session->read('Neko.authLongin');
+		$neko_auth_time = $this->Session->read('Neko.authTime');
+		$neko_auth_timeout = $this->Session->read('Neko.authTimeOut');
+		$now = time();
+		if($this->action =='login'){
+			return 0;
+		}
+		elseif($neko_auth_login != 'in'){//ログイン状態がinではない場合ログイン画面へ遷移
+			$this->redirect(array(
+				'controller' => 'Customers',
+				'action' => 'login'
+			));
+		}elseif ($neko_auth_timeout < $now){//前回のログインアクセスから30分以上たっていたらログアウトに書き換えてログイン画面へ
+			$this->Session->write('Neko.authLongin', 'out');
+			$this->Session->write('Neko.authTime', '');
+			$this->Session->write('Neko.authT
+					imeOut', '');
+			$this->Flash->error(__('前回のアクセスから一定時間が経過しました。再度ログインしてください。'));
+			$this->redirect(array(
+				'controller' => 'Customers',
+				'action' => 'login'
+			));
+		}elseif ($neko_auth_timeout > $now){//ログイン状態かつタイムアウトではない→ログイン時間更新のみ
+			$this->Session->write('Neko.authLongin', 'in');
+			$this->Session->write('Neko.authTime', time());
+			$this->Session->write('Neko.authTimeOut', time()+1800);
+		}else {//予期せぬエラーでログイン画面へ遷移（基本ここには入らない筈)
+			$this->redirect(array(
+					'controller' => 'Customers',
+					'action' => 'login'
+			));
+			$this->Flash->error(__('予期せぬエラーが発生しました。再度ログインしてください。'));//
+		}
 		//$login_time = $this->Session->read('Login.time');
 	}
 
@@ -93,9 +93,10 @@ class CustomersController extends AppController {
 
 			if ($nekoHash == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
 				$this->Session->write('Neko.authLongin', 'in');
+				$this->Session->write('Neko.userName', $username);
 				$this->Session->write('Neko.authTime', time());
 				$this->Session->write('Neko.authTimeOut', time()+1800);
-				$this->Flash->success(__('You have successfully logged out.'));
+				$this->Flash->success(__('You have successfully logged in.'));
 				$this->redirect(array(
 						'controller' => 'Customers',
 						'action' => 'index'
@@ -109,6 +110,9 @@ class CustomersController extends AppController {
 
 	public function logout() {
 		//Session情報をログアウトに
+		$this->Session->write('Neko.authLongin', 'out');
+		$this->Session->write('Neko.userName', '');
+				$this->Flash->success(__('You have successfully logged out.'));
 		$this->redirect(array(
 						'controller' => 'Customers',
 						'action' => 'index'
