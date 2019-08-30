@@ -26,7 +26,7 @@ class AppController extends Controller {
     );
 
     public function beforeFilter() {
-        $this->Auth->allow('index', 'view', 'login' ,'nekoin');
+        $this->Auth->allow('index', 'add', 'view', 'login' ,'logout' ,'nekoin');
     }
     //...
 
