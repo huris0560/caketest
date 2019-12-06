@@ -3,6 +3,7 @@
 	# Uncomment if you have a .well-known directory in the app folder, e.g. for the Let's Encrypt challenge
 	# https://tools.ietf.org/html/rfc5785
 	#RewriteRule ^(\.well-known/.*)$ $1 [L]
+	RewriteBase /pg/cakephp/myaonapp
 	RewriteRule ^$ webroot/ [L]
 	RewriteRule (.*) webroot/$1 [L]
 </IfModule>

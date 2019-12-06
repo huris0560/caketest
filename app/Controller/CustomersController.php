@@ -15,75 +15,99 @@ class CustomersController extends AppController {
 
 //		$this->Session->write('Login.Session', '');//Sessionの書き方メモ
 
-	function beforeRender() {
-//neko_authのinとoutを確認
-		$neko_auth_login = $this->Session->read('Neko.authLongin');
-		$neko_auth_time = $this->Session->read('Neko.authTime');
-		$neko_auth_timeout = $this->Session->read('Neko.authTimeOut');
-		$now = time();
-		if($this->action =='login'){
-			return 0;
-		}
-		elseif($neko_auth_login != 'in'){//ログイン状態がinではない場合ログイン画面へ遷移
-			$this->redirect(array(
-				'controller' => 'Customers',
-				'action' => 'login'
-			));
-		}elseif ($neko_auth_timeout < $now){//前回のログインアクセスから30分以上たっていたらログアウトに書き換えてログイン画面へ
-			$this->Session->write('Neko.authLongin', 'out');
-			$this->Session->write('Neko.authTime', '');
-			$this->Session->write('Neko.authT
-					imeOut', '');
-			$this->Flash->error(__('前回のアクセスから一定時間が経過しました。再度ログインしてください。'));
-			$this->redirect(array(
-				'controller' => 'Customers',
-				'action' => 'login'
-			));
-		}elseif ($neko_auth_timeout > $now){//ログイン状態かつタイムアウトではない→ログイン時間更新のみ
-			$this->Session->write('Neko.authLongin', 'in');
-			$this->Session->write('Neko.authTime', time());
-			$this->Session->write('Neko.authTimeOut', time()+1800);
-		}else {//予期せぬエラーでログイン画面へ遷移（基本ここには入らない筈)
-			$this->redirect(array(
-					'controller' => 'Customers',
-					'action' => 'login'
-			));
-			$this->Flash->error(__('予期せぬエラーが発生しました。再度ログインしてください。'));//
-		}
-		//$login_time = $this->Session->read('Login.time');
-	}
-
 	/**
 	 * Logins
 	 *
 	 * @var array
 	 */
+
+
+	public function _after_estimate(){//nekocoreから作成済みの同人誌オーダーを受け取る
+
+//		if($this->request->is('post')){//自分にポストが来たことを確認
+//			$systs = $this->request->data('systs');//見積もりシステムから投げられるPOSTの受領
+//			$estimateid = $this->request->data('estimateid');
+
+			$systs = '1573119411';
+			$estimateid = '5dc3e5b2-6d5c-4276-a654-2fdecaeab14b';
+			$token_1 = '71fbb4157aba5243970966726811925622a6ba02';
+//			$token =  $this->request->data('token');//tokenはトークン生成後の変数としていたので一時退避
+			if($systs  != "" && $estimateid != "" && $token_1 != ""){//$this->request->data('token')一個上に連動して受領トークンは変数へ代入せずにrequestから取る。
+				$match_tkn = sha1($systs.$estimateid.XML_SECRET);
+				if($match_tkn != $token_1){//受領トークンと生成トークンが等しいか確認・・・え、これ意味ある？
+					//エラー表示する？元ページに遷移？
+				}
+				//トークン生成
+				$sts = time();
+				$token = sha1($sts.$estimateid.XML_SECRET);
+				//XML取得URL生成
+				$rep_url = XML_LWP_URL ."?sts=" .$sts ."&eid=" .$estimateid ."&tkn=" .$token;
+			}
+//			$rest_date ="hoge";
+			$rest_date = $this->_api_rest('GET', $rep_url);
+			return $rest_date;
+
+//			$this->redirect(array('controller' => 'Customers','action' => 'index'));//ポストを投げられた以外の動作、現在は仮にインデックスへ遷移
+//		}
+
+			//レスポンスがNullならエラー終了
+			if(isset($rest_date)){
+				echo "おｋ";
+
+
+			}
+
+	}
+
+
 	public function nekoin(){
+
+
+		$tempdate='0';
+		$tempdate = $this->_after_estimate();
+		echo $tempdate;
 
 		$sha256 = Security::hash('CakePHP Framework', 'sha256', true);
 		$newHash = Security::hash('nyanko','sha256',true);
 
 		$username = $this->request->data('Customer.username');
 		$password = $this->request->data('Customer.password');
+		$tempPostData = $this->request->data('tempPostData');
 
 		$test01 = "nyanko";
-		echo "test6をハッシュ化すると[ ".$newHash."<br>";
-		echo "Security::hash('nyanko','sha256',true);　".Security::hash('nyanko','sha256',true)."<br>";
-		echo "Security::hash($test01,'sha256',true);　".Security::hash($test01,'sha256',true)."<br>";
+
+
+//ハッシュ化関連テスト
+//		echo "Security::hash('nyanko','sha256',true);　".Security::hash('nyanko','sha256',true)."<br>";
+//		echo "Security::hash($test01,'sha256',true);　".Security::hash($test01,'sha256',true)."<br>";
 
 		$pass = $this->Customer->find('all', array('conditions' => array('customer_name' => $username)));
 		$pass2 = $pass['0']['Customer']['password'];
-		echo $username . "でデータベースから取り出してハッシュ化しない生値として読む ".$pass2."<br>";
-		echo "POSTしたPWのハッシュ化 ".Security::hash($password,'sha256',true)."<br>";
-		echo "POSTしたPWのハッシュ化 ".Security::hash($this->request->data('Customer.password'),'sha256',true)."<br>";
-		echo "POSTしたPW ".$password ."<br>";
+
+//		echo $username . "でデータベースから取り出してハッシュ化しない生値として読む ".$pass2."<br>";
+
+		echo "いろいろ取ってみる ".$this->Session->read('Neko.longinReferer')."<br>";//$this->request->referer('/')."<br>";
+//		echo "POSTしたPWのハッシュ化 ".Security::hash($this->request->data('Customer.password'),'sha256',true)."<br>";
+//		echo "POSTしたPW ".$password ."<br>";
+//		echo "外部からの直POST ".$tempPostData ."<br>";
+		echo "XML_SECRET ".XML_SECRET ."<br>";
 	}
 
 
 	public function login(){
+//		$url = $this->referer(null, true);
+//		echo "URL".$url."<br>";
+//		echo "REFURL".$this->Session->read('Neko.longinReferer');//$this->Session->read('RedererUrl');
+//		$return_url = $this->Session->read('Neko.longinReferer');
+
+//		if($url = " /Customers/login"){//リファラから取得したURLがlogin以外からだった場合は更新(memo あれ？これ要らんのでは？
+//		}else {
+//			$this->Session->write('RedererUrl', $url);
+//				$this->Session->write('Neko.userName', $username);
+//		}
 		if ($this->request->is('post')) {//自分にポストが来た
-			$username = $this->request->data('Customer.username');//POST受領
-			$password = $this->request->data('Customer.password');
+			$username = $this->request->data('Customer.ログインID');//POST受領
+			$password = $this->request->data('Customer.パスワード');
 			$nekoHash = Security::hash($password,'sha256',true);
 			$PW = $this->Customer->find('all', array('conditions' => array('customer_name'=>$username)));
 			if(empty($PW)){
@@ -96,12 +120,8 @@ class CustomersController extends AppController {
 				$this->Session->write('Neko.userName', $username);
 				$this->Session->write('Neko.authTime', time());
 				$this->Session->write('Neko.authTimeOut', time()+1800);
-				$this->Flash->success(__('You have successfully logged in.'));
-				$this->redirect(array(
-						'controller' => 'Customers',
-						'action' => 'index'
-				)
-			);
+				$this->Flash->success(__('ログインに成功しました。'));
+				$this->redirect(array('controller' => 'Customers','action' => 'index')); //$return_url);
 			} else {
 				$this->Flash->error(__('PWが違います(確認用、メッセージは修正せよ)'));//Flashでメッセージを表示するだけ
 			}
@@ -110,7 +130,8 @@ class CustomersController extends AppController {
 
 	public function logout() {
 		//Session情報をログアウトに
-		$this->Session->write('Neko.authLongin', 'out');
+		$this->Session->write('Neko.authLongin', 'out'
+				);
 		$this->Session->write('Neko.userName', '');
 				$this->Flash->success(__('You have successfully logged out.'));
 		$this->redirect(array(

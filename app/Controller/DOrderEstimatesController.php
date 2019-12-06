@@ -10,12 +10,90 @@ App::uses('AppController', 'Controller');
  */
 class DOrderEstimatesController extends AppController {
 
+	public $helpers = array('Html', 'Form');
 /**
  * Components
  *
  * @var array
  */
 	public $components = array('Paginator', 'Session', 'Flash');
+
+
+	public function confirmcart() {
+		//POSTで入って来た
+		if($this->request->is('post')){
+//			$order_estimate_cd = $this->request->data(変数名検討中)
+			//必要な値を持っている(要らんか?
+			$options = array('conditions' => array('DOrderEstimate.' . $this->DOrderEstimate->primaryKey => '2
+			'));//※テスト用仮
+			//DOrderEstimate上に目的のレコードが存在しているか確認（していない場合エラー終了
+			if($this->DOrderEstimate->find('first', $options) != null){//レコードが見つかる＝POST内容が正しい
+				echo 'レコードあり〼';
+//				var_dump($this->DOrderEstimate->find('first', $options));
+				$temp = $this->DOrderEstimate->find('first', $options);
+				$temp = $temp['DOrderEstimate']['order_estimate_cd'];
+
+				$cart = array(
+						'cart_cd' => '',
+						'login_cd' => '',
+						'user_cd' => '',
+						'item_cd' => $temp,
+						'item_no' => $temp,
+						'item_name1' => $temp,
+						'item_name2' => $temp,
+						'catg_l_cd' => $temp,
+						'catg_m_cd' => $temp,
+						'fixed_price' => $temp,
+						'code_price' => $temp,
+						'discount_rate' => $temp,
+						'sales_price' => $temp,
+						'item_img1' => $temp,
+						'maker_price' => $temp,
+						'nouki' => $temp,
+						'order_num' => $temp,
+						'sub_total_price' => $temp,
+						'biko_sub' => $temp,
+						'update_day' => $temp,
+						'souryou' => $temp,
+						'stock_flag' => $temp,
+						'sales_limit' => $temp,
+						'open_price_flag' => $temp,
+						's_free_flag' => $temp,
+						'upload_flag' => $temp,
+						'hontai_price' => $temp,
+						'sub_total_hontai_price' => $temp,
+						'souryo_taxfree' => $temp,
+						'fixed_price_hontai' => $temp
+
+				);
+				var_dump($cart);
+
+			}else {
+				echo 'ぬる';
+				var_dump($this->DOrderEstimate->find('first', $options));
+
+			}
+		}
+
+
+
+//こっから本来の
+		$this->loadModel("DCart");
+//		$estimateid = $this->request->data('Dinfos.estimateid');
+		$estimateid = '106247';//テスト用固定No、実装時にはPOSTで受ける
+		if ($this->request->is('post')){
+			$ans = $this->DCart->find('all', array('conditions' => array('cart_cd' => $estimateid)));
+
+
+//			var_dump($ans);
+//		if ($this->DOrderEstimate->save($ans['0']["DOrderEstimate"])){
+			$this->Session->setFlash("おｋ");
+//		} else {
+//			$this->Session->setFlash("だめ");
+			}
+//		}
+	}
+
 
 /**
  * index method

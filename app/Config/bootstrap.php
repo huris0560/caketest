@@ -66,7 +66,7 @@ Cache::config('default', array('engine' => 'File'));
  * CakePlugin::loadAll(); // Loads all plugins at once
  * CakePlugin::load('DebugKit'); // Loads a single plugin named DebugKit
  */
- 
+
 CakePlugin::loadAll(); // Loads all plugins at once
 CakePlugin::load('DebugKit'); // Loads a single plugin named DebugKit
 
@@ -112,3 +112,6 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+define('XML_SECRET','355DMW+md3_Lb-;X');//見積もりシステムアクセス用
+//define('XML_LWP_URL','https://'.$_ENV['SERVER_NAME'].'/nekocore/registrations/application.xml');//見積もりシステムアクセス用URL
+define('XML_LWP_URL','http://www3.shippo.co.jp/nekocore/registrations/application.xml');//見積もりシステムアクセス用URL仮
