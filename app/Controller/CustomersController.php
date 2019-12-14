@@ -116,7 +116,7 @@ class CustomersController extends AppController {
 			}
 
 			if ($nekoHash == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
-				$this->Session->write('Neko.authLongin', 'in');
+				$this->Session->write('Neko.authStatus', 'in');
 				$this->Session->write('Neko.userName', $username);
 				$this->Session->write('Neko.authTime', time());
 				$this->Session->write('Neko.authTimeOut', time()+1800);
@@ -130,7 +130,7 @@ class CustomersController extends AppController {
 
 	public function logout() {
 		//Session情報をログアウトに
-		$this->Session->write('Neko.authLongin', 'out'
+		$this->Session->write('Neko.authStatus', 'out'
 				);
 		$this->Session->write('Neko.userName', '');
 				$this->Flash->success(__('You have successfully logged out.'));

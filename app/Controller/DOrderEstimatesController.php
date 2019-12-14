@@ -28,17 +28,17 @@ class DOrderEstimatesController extends AppController {
 			'));//※テスト用仮
 			//DOrderEstimate上に目的のレコードが存在しているか確認（していない場合エラー終了
 			if($this->DOrderEstimate->find('first', $options) != null){//レコードが見つかる＝POST内容が正しい
-				echo 'レコードあり〼';
+				echo 'レコードあり';
 //				var_dump($this->DOrderEstimate->find('first', $options));
-				$temp = $this->DOrderEstimate->find('first', $options);
-				$temp = $temp['DOrderEstimate']['order_estimate_cd'];
-
+				$order = $this->DOrderEstimate->find('first', $options);
+				$order = $order['DOrderEstimate'];
+				$temp = '';
 				$cart = array(
 						'cart_cd' => '',
-						'login_cd' => '',
-						'user_cd' => '',
-						'item_cd' => $temp,
-						'item_no' => $temp,
+						'login_cd' => $this->Cookie->read('lcdc'),
+						'user_cd' => $this->Cookie->read('ucdc'),
+						'item_cd' => $order['item_cd'],
+						'item_no' => $order['item_no'],
 						'item_name1' => $temp,
 						'item_name2' => $temp,
 						'catg_l_cd' => $temp,
@@ -66,7 +66,10 @@ class DOrderEstimatesController extends AppController {
 						'fixed_price_hontai' => $temp
 
 				);
-				var_dump($cart);
+
+				$apple = array("orange", "banana");
+				$apple['mac']='OS';
+				var_dump($apple);
 
 			}else {
 				echo 'ぬる';
