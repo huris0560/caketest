@@ -43,54 +43,53 @@ class CustomersController extends AppController {
 				//XML取得URL生成
 				$rep_url = XML_LWP_URL ."?sts=" .$sts ."&eid=" .$estimateid ."&tkn=" .$token;
 			}
-//			$rest_date ="hoge";
-			$rest_date = $this->_api_rest('GET', $rep_url);
-			return $rest_date;
+//			$rest_data ="hoge";
+			$rest_data = $this->_api_rest('GET', $rep_url);
+			return $rest_data;
 
 //			$this->redirect(array('controller' => 'Customers','action' => 'index'));//ポストを投げられた以外の動作、現在は仮にインデックスへ遷移
 //		}
 
 			//レスポンスがNullならエラー終了
-			if(isset($rest_date)){
+			if(isset($rest_data)){
 				echo "おｋ";
-
-
-			}
-
+		}
 	}
 
-
 	public function nekoin(){
+		$id = 'あｆｋ';
+		$this->set('color', $id);
+		$test1 = $this->request->data('Customer.test1');
+//		$test2 = $this->request->data('Customer.test2');
+		$test2 = $this->request->query['test2'];
 
 
-		$tempdate='0';
-		$tempdate = $this->_after_estimate();
-		echo $tempdate;
+//		$tempdate = $this->_after_estimate();
 
-		$sha256 = Security::hash('CakePHP Framework', 'sha256', true);
-		$newHash = Security::hash('nyanko','sha256',true);
+//		$sha256 = Security::hash('CakePHP Framework', 'sha256', true);
+//		$newHash = Security::hash('nyanko','sha256',true);
 
-		$username = $this->request->data('Customer.username');
-		$password = $this->request->data('Customer.password');
-		$tempPostData = $this->request->data('tempPostData');
 
-		$test01 = "nyanko";
+//		$tempPostData = $this->request->data('tempPostData');
+
+//		$test01 = "nyanko";
 
 
 //ハッシュ化関連テスト
 //		echo "Security::hash('nyanko','sha256',true);　".Security::hash('nyanko','sha256',true)."<br>";
 //		echo "Security::hash($test01,'sha256',true);　".Security::hash($test01,'sha256',true)."<br>";
 
-		$pass = $this->Customer->find('all', array('conditions' => array('customer_name' => $username)));
-		$pass2 = $pass['0']['Customer']['password'];
+//		$pass = $this->Customer->find('all', array('conditions' => array('customer_name' => $username)));
+//		$pass2 = $pass['0']['Customer']['password'];
 
-//		echo $username . "でデータベースから取り出してハッシュ化しない生値として読む ".$pass2."<br>";
+		echo "POSTで送られてきたのは". $test1. "<br>"; //.$test2 ."<br>";
+		echo "GETで送られてきたのは". var_dump($test2). "<br>"; //.$test2 ."<br>";
 
-		echo "いろいろ取ってみる ".$this->Session->read('Neko.longinReferer')."<br>";//$this->request->referer('/')."<br>";
+//		echo "いろいろ取ってみる ".$this->Session->read('Neko.longinReferer')."<br>";//$this->request->referer('/')."<br>";
 //		echo "POSTしたPWのハッシュ化 ".Security::hash($this->request->data('Customer.password'),'sha256',true)."<br>";
 //		echo "POSTしたPW ".$password ."<br>";
 //		echo "外部からの直POST ".$tempPostData ."<br>";
-		echo "XML_SECRET ".XML_SECRET ."<br>";
+//		echo "XML_SECRET ".XML_SECRET ."<br>";
 	}
 
 
@@ -116,7 +115,7 @@ class CustomersController extends AppController {
 			}
 
 			if ($nekoHash == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
-				$this->Session->write('Neko.authStatus', 'in');
+				$this->Session->write('Neko.authStatus', 'customer');
 				$this->Session->write('Neko.userName', $username);
 				$this->Session->write('Neko.authTime', time());
 				$this->Session->write('Neko.authTimeOut', time()+1800);
@@ -156,7 +155,6 @@ class CustomersController extends AppController {
 	public function index() {
 		$this->Customer->recursive = 0;
 		$this->set('customers', $this->Paginator->paginate());
-
 	}
 
 /**

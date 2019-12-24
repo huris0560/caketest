@@ -144,12 +144,15 @@ class DCartsController extends AppController {
 								$rest_data['kuchie_limit_time'] = '15:00:00';
 								$rest_data['kuchie_discount_limit_time'] = '15:00:00';
 								$rest_data['kuchie_express_limit_time'] = '15:00:00';
-								$this->DCart->save($rest_data);
-
+								if($this->DCart->save($rest_data)){
+									$id = $this->DCart->getLastInsertID();
+//									$order_step_url =  '/sp-bin/mypage/cart.cgi?dojin=1&estimate_cd='.urlencode(utf8_encode($id));
+									$this->set('id', $id);
+								}
 								//次のページへの前処理
-//								$order_step_url =  '/sp-bin/mypage/cart.cgi?dojin=1&estimate_cd='.urlencode(utf8_encode($rest_data));
-//								旧来の処理ではエスケープした文字列を後処理に回していたが、redirect後にDBから読ませる処理へ
-								$send_no = $resr_data
+
+								//saveしたデータのidを捕まえる
+								//アドレスが古いままだが実装時にいじる
 							}
 						}
 					}
@@ -167,7 +170,6 @@ class DCartsController extends AppController {
 /**
  * edit method
  *
- * @throws NotFoundException
  * @param string $id
  * @return void
  */

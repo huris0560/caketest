@@ -25,15 +25,14 @@ class AppController extends Controller {
 //				)
 //			),
 //		'authorize' => array('Controller')
+
 //	)
 );
 
     public function beforeFilter() {
 
-
-
 //cake上のAuthcomponent
-        $this->Auth->allow('index', 'add', 'view', 'login' ,'logout' ,'nekoin' ,'confirmcart');
+        $this->Auth->allow('index', 'add', 'view', 'login' ,'logout' ,'nekoin' ,'dojincartconfirm', 'error');
 
 //myaonログインチェック//
 //		$postdata = $this->request->data;//POST情報の保存
@@ -63,8 +62,8 @@ class AppController extends Controller {
     }
 
     public function beforeRender() {
-
     }
+
     public function isAuthorized($user) {//現在使用していない。
     // Admin can access every action
     	if (isset($user['role']) && $user['role'] === 'admin') {
@@ -72,7 +71,7 @@ class AppController extends Controller {
     	}
     	// デフォルトは拒否
     	return false;
-    	}
+    }
 
 	public function _api_rest($method, $uri, $query = null, $data = null){
     	$ch = curl_init();
@@ -88,7 +87,6 @@ class AppController extends Controller {
 		$response = curl_exec($ch);//json_decode(curl_exec($ch), true); // 第2引数をtrueにすると連想配列で返ってくる
 
 //		curl_getinfo($ch);
-
 		curl_close($ch);
 
         return $response;
@@ -100,6 +98,16 @@ class AppController extends Controller {
 //    	if($this->action =='login'){
 //    		return 0;
 //    	}
+    	$path = $this->request->here;
+		$neko_referer_url = Router::url('/');
+
+    	//必要情報を変数に挿入
+    	$neko_auth_status = $this->Session->read('Neko.authStatus');
+    	$neko_auth_time = $this->Session->read('Neko.authTime');
+    	$neko_auth_timeout = $this->Session->read('Neko.authTimeOut');
+    	$now = time();
+
+
     	if($neko_auth_status != 'customer'){//ログイン状態がcustomerではない場合ログイン画面へ遷移
 			if($neko_auth_status == 'timeout'){//タイムアウト状態
 				$this->Session->write('Neko.longinReferer', $neko_referer_url);
@@ -116,15 +124,16 @@ class AppController extends Controller {
 				$this->Session->write('Neko.authTimeOut', '');//ログインタイムアウト時間をクリア
 				$this->Flash->error(__('ログインまたは会員登録をお願いします。'));
 				$this->redirect(array(
-						'controller' => 'Customers',
-						'action' => 'login'
+					'controller' => 'Customers',
+					'action' => 'login'
 				));
 			}
     	}else{//ログインステータスがカスタマー＝ログイン中なのでスルー
     		return 0;
     	}
-    	//予期せぬエラーでログイン画面へ遷移（基本ここには入らない)
-    	$this->Session->write('Neko.longinReferer', $neko_referer_url);
+
+		//予期せぬエラーでログイン画面へ遷移（基本ここには入らない)
+		$this->Session->write('Neko.longinReferer', $neko_referer_url);
 		$this->Session->write('Neko.authTime', '');//ログイン時間をクリア
 		$this->Session->write('Neko.authTimeOut', '');//ログインタイムアウト時間をクリア
 		$this->Flash->error(__('予期せぬエラーが発生しました。再度ログインしてください。'));

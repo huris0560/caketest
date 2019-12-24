@@ -19,68 +19,91 @@ class DOrderEstimatesController extends AppController {
 	public $components = array('Paginator', 'Session', 'Flash');
 
 
-	public function confirmcart() {
-		//POSTで入って来た
-		if($this->request->is('post')){
-//			$order_estimate_cd = $this->request->data(変数名検討中)
-			//必要な値を持っている(要らんか?
-			$options = array('conditions' => array('DOrderEstimate.' . $this->DOrderEstimate->primaryKey => '2
-			'));//※テスト用仮
-			//DOrderEstimate上に目的のレコードが存在しているか確認（していない場合エラー終了
-			if($this->DOrderEstimate->find('first', $options) != null){//レコードが見つかる＝POST内容が正しい
-				echo 'レコードあり';
-//				var_dump($this->DOrderEstimate->find('first', $options));
-				$order = $this->DOrderEstimate->find('first', $options);
-				$order = $order['DOrderEstimate'];
-				$temp = '';
-				$cart = array(
-						'cart_cd' => '',
-						'login_cd' => $this->Cookie->read('lcdc'),
-						'user_cd' => $this->Cookie->read('ucdc'),
-						'item_cd' => $order['item_cd'],
-						'item_no' => $order['item_no'],
-						'item_name1' => $temp,
-						'item_name2' => $temp,
-						'catg_l_cd' => $temp,
-						'catg_m_cd' => $temp,
-						'fixed_price' => $temp,
-						'code_price' => $temp,
-						'discount_rate' => $temp,
-						'sales_price' => $temp,
-						'item_img1' => $temp,
-						'maker_price' => $temp,
-						'nouki' => $temp,
-						'order_num' => $temp,
-						'sub_total_price' => $temp,
-						'biko_sub' => $temp,
-						'update_day' => $temp,
-						'souryou' => $temp,
-						'stock_flag' => $temp,
-						'sales_limit' => $temp,
-						'open_price_flag' => $temp,
-						's_free_flag' => $temp,
-						'upload_flag' => $temp,
-						'hontai_price' => $temp,
-						'sub_total_hontai_price' => $temp,
-						'souryo_taxfree' => $temp,
-						'fixed_price_hontai' => $temp
+	public function dojincartconfirm() {
+		$this->_neko_auth();
+		//GETで入って来た
+		if($this->request->is('get')){
+			$estimate_cd = $this->request->query['estimate_cd'];
+			echo $estimate_cd;
+			$options = array('conditions' => array('DOrderEstimate.' .$this->DOrderEstimate->primaryKey => $estimate_cd));//※テスト用仮
 
-				);
-
-				$apple = array("orange", "banana");
-				$apple['mac']='OS';
-				var_dump($apple);
-
+			$temp = $this->DOrderEstimate->find('first', $options);
+//			$this->set('hoge', $this->DOrderEstimate->find('first', $options));
+			//見積もりデータが存在していない場合
+			if (empty($this->DOrderEstimate->find('first', $options))){
+//				//エラー画面表示
+				$this->Flash->error(__('この見積もりは無効です。'));
+				$this->redirect('error');
 			}else {
-				echo 'ぬる';
-				var_dump($this->DOrderEstimate->find('first', $options));
-
+				$this->set('hoge', $this->DOrderEstimate->find('first', $options));
+//				//確認画面表示
+//				$this->set('hoge', $temp);
+				return 0;
 			}
 		}
+	}
+		//見積もりデータの取得
+
+		public function shoppingcartconfirm() {//未完！！
+			//POSTで入って来た
+			if($this->request->is('post')){
+				//			$order_estimate_cd = $this->request->data(変数名検討中)
+				//必要な値を持っている(要らんか?
+				$options = array('conditions' => array('DOrderEstimate.' . $this->DOrderEstimate->primaryKey => '2'));//※テスト用仮
+				//DOrderEstimate上に目的のレコードが存在しているか確認（していない場合エラー終了
+				if($this->DOrderEstimate->find('first', $options) != null){//レコードが見つかる＝POST内容が正しい
+					echo 'レコードあり';
+					//				var_dump($this->DOrderEstimate->find('first', $options));
+					$order = $this->DOrderEstimate->find('first', $options);
+					$order = $order['DOrderEstimate'];
+					$temp = '';
+					$cart = array(
+							'cart_cd' => '',
+							'login_cd' => $this->Cookie->read('lcdc'),
+							'user_cd' => $this->Cookie->read('ucdc'),
+							'item_cd' => $order['item_cd'],
+							'item_no' => $order['item_no'],
+							'item_name1' => $temp,
+							'item_name2' => $temp,
+							'catg_l_cd' => $temp,
+							'catg_m_cd' => $temp,
+							'fixed_price' => $temp,
+							'code_price' => $temp,
+							'discount_rate' => $temp,
+							'sales_price' => $temp,
+							'item_img1' => $temp,
+							'maker_price' => $temp,
+							'nouki' => $temp,
+							'order_num' => $temp,
+							'sub_total_price' => $temp,
+							'biko_sub' => $temp,
+							'update_day' => $temp,
+							'souryou' => $temp,
+							'stock_flag' => $temp,
+							'sales_limit' => $temp,
+							'open_price_flag' => $temp,
+							's_free_flag' => $temp,
+							'upload_flag' => $temp,
+							'hontai_price' => $temp,
+							'sub_total_hontai_price' => $temp,
+							'souryo_taxfree' => $temp,
+							'fixed_price_hontai' => $temp
+
+					);
+
+					$apple = array("orange", "banana");
+					$apple['mac']='OS';
+					var_dump($apple);
+
+				}else {
+					echo 'ぬる';
+					var_dump($this->DOrderEstimate->find('first', $options));
+
+				}
+			}
 
 
-
-//こっから本来の
+//通常カート処理未完部分
 		$this->loadModel("DCart");
 //		$estimateid = $this->request->data('Dinfos.estimateid');
 		$estimateid = '106247';//テスト用固定No、実装時にはPOSTで受ける
@@ -97,7 +120,9 @@ class DOrderEstimatesController extends AppController {
 //		}
 	}
 
+	public function error() {
 
+	}
 /**
  * index method
  *

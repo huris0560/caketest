@@ -27,7 +27,7 @@ class DInfosController extends AppController {
 				$rep_url = XML_LWP_URL ."?sts=" .$sts ."&eid=" .$estimateid ."&tkn=" .$token;
 			}
 
-			$rest_date = api_rest(GET, $rep_url);
+			$rest_data = api_rest(GET, $rep_url);
 			$estimateid = "" ;
 //			$this->redirect(array('controller' => 'Customers','action' => 'index'));//ポストを投げられた以外の動作、現在は仮にインデックスへ遷移
 		}
@@ -56,15 +56,15 @@ class DInfosController extends AppController {
 			//XML取得URL生成
 			$rep_url = XML_LWP_URL ."?sts=" .$sts ."&eid=" .$estimateid ."&tkn=" .$token;
 		}
-		//			$rest_date ="hoge";
-		$rest_date = $this->_api_rest('GET', $rep_url);
-		return $rest_date;
+		//			$rest_data ="hoge";
+		$rest_data = $this->_api_rest('GET', $rep_url);
+		return $rest_data;
 
 		//			$this->redirect(array('controller' => 'Customers','action' => 'index'));//ポストを投げられた以外の動作、現在は仮にインデックスへ遷移
 		//		}
 
 		//レスポンスがNullならエラー終了
-		if(isset($rest_date)){
+		if(isset($rest_data)){
 			echo "おｋ";
 
 
