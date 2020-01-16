@@ -78,11 +78,11 @@ class DCartsController extends AppController {
 				$token = sha1($sts.$estimateid.XML_SECRET);
 				//XML取得URL生成
 				$rep_url = XML_LWP_URL ."?sts=" .$sts ."&eid=" .$estimateid ."&tkn=" .$token;
-//				$rest_data ="hoge";
+				//				$rest_data ="hoge";
 
 				//XMLでのデータ取得
 				$rest_data = $this->_api_rest('GET', $rep_url);
-//				return $rest_data;
+				//				return $rest_data;
 				//取得データチェック
 				if('1'){
 					//データ入力チェック
@@ -131,35 +131,35 @@ class DCartsController extends AppController {
 							|| isset($rest_data['ExternalTax'])
 							|| isset($rest_data['PackCoverPrice'])
 							|| isset($rest_data['PackBodyPrice']))
-								{//値が入っていない場合falseを返すのみ。
-									$this->render('afterestimate');
-								}else{
-								//各種時間情報挿入
-								$rest_data['hyosi_limit_time'] = '15:00:00';
-								$rest_data['hyosi_discount_limit_time'] = '15:00:00';
-								$rest_data['hyosi_express_limit_time'] = '15:00:00';
-								$rest_data['honbun_limit_time'] = '15:00:00';
-								$rest_data['honbun_discount_limit_time'] = '15:00:00';
-								$rest_data['honbun_express_limit_time'] = '15:00:00';
-								$rest_data['kuchie_limit_time'] = '15:00:00';
-								$rest_data['kuchie_discount_limit_time'] = '15:00:00';
-								$rest_data['kuchie_express_limit_time'] = '15:00:00';
-								if($this->DCart->save($rest_data)){
-									$id = $this->DCart->getLastInsertID();
-//									$order_step_url =  '/sp-bin/mypage/cart.cgi?dojin=1&estimate_cd='.urlencode(utf8_encode($id));
-									$this->set('id', $id);
-								}
-								//次のページへの前処理
-
-								//saveしたデータのidを捕まえる
-								//アドレスが古いままだが実装時にいじる
-							}
+					{//値が入っていない場合falseを返すのみ。
+						$this->render('afterestimate');
+					}else{
+						//各種時間情報挿入
+						$rest_data['hyosi_limit_time'] = '15:00:00';
+						$rest_data['hyosi_discount_limit_time'] = '15:00:00';
+						$rest_data['hyosi_express_limit_time'] = '15:00:00';
+						$rest_data['honbun_limit_time'] = '15:00:00';
+						$rest_data['honbun_discount_limit_time'] = '15:00:00';
+						$rest_data['honbun_express_limit_time'] = '15:00:00';
+						$rest_data['kuchie_limit_time'] = '15:00:00';
+						$rest_data['kuchie_discount_limit_time'] = '15:00:00';
+						$rest_data['kuchie_express_limit_time'] = '15:00:00';
+						if($this->DCart->save($rest_data)){
+							$id = $this->DCart->getLastInsertID();
+							//									$order_step_url =  '/sp-bin/mypage/cart.cgi?dojin=1&estimate_cd='.urlencode(utf8_encode($id));
+							$this->set('id', $id);
 						}
+						//次のページへの前処理
+
+						//saveしたデータのidを捕まえる
+						//アドレスが古いままだが実装時にいじる
 					}
-			}else{
-				$this->Flash->error(__('内部エラー：参照元を特定できませんでした。'));
-				$this->render('afterestimate');
+				}
 			}
+		}else{
+			$this->Flash->error(__('内部エラー：参照元を特定できませんでした。'));
+			$this->render('afterestimate');
+		}
 
 		$this->Flash->error(__('エラー：不正なページ遷移を検知しました。'));//POST無しでここに入った場合
 		$this->render('afterestimate');

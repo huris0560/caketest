@@ -5,13 +5,27 @@
 </tr>
 <tr class="line">
 <td class="title">
-<?php echo 'お見積番号：'.h($hoge['DOrderEstimate']['estimate_no']).'<br />';
+<?php echo 'お見積番号：'.h($cart['DOrderEstimate']['estimate_no']).'<br />';
 ?>
-<a href="#"><?php echo h($hoge['DOrderEstimate']['pack_name']) ?></a>
+<a href="#"><?php echo h($cart['DOrderEstimate']['pack_name']) ?></a>
 <br />
-<?php echo h($hoge['DOrderEstimate']['hon_size']) . '/'. h($hoge['DOrderEstimate']['hon_page']). 'ページ' .h($hoge['DOrderEstimate']['hon_busu']).'部'; ?>
+<?php echo h($cart['DOrderEstimate']['hon_size']) . '/'. h($cart['DOrderEstimate']['hon_page']). 'ページ' .h($cart['DOrderEstimate']['hon_busu']).'部'; ?>
 </td>
-<td class="money"><?php echo h($hoge['DOrderEstimate']['sum_price']) ?></td>
+<td class="money"><?php echo h($cart['DOrderEstimate']['sum_price']) ?></td>
+
+
+<?php echo __('Actions'); ?>
+
+<?php echo $this->Form->create(false, array(
+		'type'=> 'get',
+    	'url' => array('controller' => 'DUsers', 'action' => 'dojinpaymentmethod')
+		));
+		echo $this->Form->hidden('dojin', ['value' => $dojin]);
+		echo $this->Form->hidden('estimate_cd', ['value' => $estimate_cd]);
+	?>
+	<?php echo $this->Form->end(__('Submit')); ?>
+</div>
+<div class="actions">
 
 </tr>
 </table>

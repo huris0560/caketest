@@ -57,6 +57,10 @@ class CustomersController extends AppController {
 	}
 
 	public function nekoin(){
+		$this->set('select1', $this->Customer->find('list', array(
+				'fields' => array('id', 'customer_name')
+		)));
+
 		$id = 'あｆｋ';
 		$this->set('color', $id);
 		$test1 = $this->request->data('Customer.test1');
@@ -117,6 +121,7 @@ class CustomersController extends AppController {
 			if ($nekoHash == $PW['0']['Customer']['password']){//自分にポストが来たIDPWが正しいか確認
 				$this->Session->write('Neko.authStatus', 'customer');
 				$this->Session->write('Neko.userName', $username);
+				$this->Cookie->write('Neko.userName', $username);
 				$this->Session->write('Neko.authTime', time());
 				$this->Session->write('Neko.authTimeOut', time()+1800);
 				$this->Flash->success(__('ログインに成功しました。'));

@@ -32,7 +32,18 @@ class AppController extends Controller {
     public function beforeFilter() {
 
 //cake上のAuthcomponent
-        $this->Auth->allow('index', 'add', 'view', 'login' ,'logout' ,'nekoin' ,'dojincartconfirm', 'error');
+        $this->Auth->allow('index',
+        		'add',
+        		'view',
+        		'login',
+        		'logout',
+        		'nekoin',
+        		'dojincartconfirm',
+        		'error' ,'afterestimate',
+        		'dojindeliveryaddr',
+        		'dojinpaymentmethod',
+        		'dojinordercheck'
+        		);
 
 //myaonログインチェック//
 //		$postdata = $this->request->data;//POST情報の保存
@@ -95,9 +106,13 @@ class AppController extends Controller {
 
 
     public function _neko_auth(){
-//    	if($this->action =='login'){
-//    		return 0;
-//    	}
+//$neko_auth_status
+//customer
+//guest
+//timeout
+//logout
+
+
     	$path = $this->request->here;
 		$neko_referer_url = Router::url('/');
 
