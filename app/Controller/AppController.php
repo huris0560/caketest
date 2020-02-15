@@ -32,7 +32,8 @@ class AppController extends Controller {
     public function beforeFilter() {
 
 //cake上のAuthcomponent
-        $this->Auth->allow('index',
+        $this->Auth->allow('testin',
+        		'index',
         		'add',
         		'view',
         		'login',
@@ -42,7 +43,11 @@ class AppController extends Controller {
         		'error' ,'afterestimate',
         		'dojindeliveryaddr',
         		'dojinpaymentmethod',
-        		'dojinordercheck'
+        		'dojinordercheck',
+        		'creditpay',
+
+        		'SB_credit_pay',
+        		'hoge'//ajaxtestのやつ
         		);
 
 //myaonログインチェック//

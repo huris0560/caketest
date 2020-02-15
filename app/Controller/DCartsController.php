@@ -10,6 +10,7 @@ App::uses('AppController', 'Controller');
  */
 class DCartsController extends AppController {
 
+
 /**
  * Components
  *
@@ -27,6 +28,9 @@ class DCartsController extends AppController {
 		$this->set('dCarts', $this->Paginator->paginate());
 	}
 
+	public function testin(){
+
+	}
 /**
  * view method
  *

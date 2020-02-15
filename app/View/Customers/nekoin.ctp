@@ -1,15 +1,14 @@
 <div class="customers form">
 
 <?php
-//	echo $this->Form->create(false, array(
-//	'type'=> 'get',
- //   'url' => array('controller' => 'Customers', 'action' => 'nekoin')
-//    'id' => 'RecipesAdd'
-//		));
+echo $this->Html->script('jquery');
+echo $this->Html->script('senddata');
+echo $this->Html->script(API_URL);//カードトークン化javascript
 
 
 
-
+//echo 'テスト</br>';
+echo API_URL;
 //Formの作成
 echo $this->Form->create('Nekoin');
 
@@ -22,11 +21,7 @@ $options = [
 		'abcde' => 'ABCDE',
 		'あいうえお' => 'あいうえお'
 ];
-echo $this->Form->radio('radio', $options);
-
-
-
-
+echo $this->Form->radio('らじお', $options);
 
 		echo $this->Form->input('customer', array(
 				'type' => 'checkbox',

@@ -21,9 +21,9 @@ echo '<br>';
 	$options = [
 		'1' => 'クレジットカード決済',
 		'9' => '銀行振込'
-	];
-	echo $this->Form->radio('pay_mathod', $options);
+	];//確認ページはさんで決済ページなのに決済ページに直接接続してる。アカン！！
 
+	echo $this->Form->radio('pay_mathod', $options);
 	echo $this->Form->hidden('dojin', ['value' => $dojin]);
 	echo $this->Form->hidden('estimate_cd', ['value' => $estimate_cd]);
 

@@ -25,26 +25,21 @@ class DOrderEstimatesController extends AppController {
 		//ログインチェック
 //		$this->_neko_auth();
 		//GETで入って来た
-		if($this->request->is('get')){
+		if($this->request->is('get')){//GETで入って来た
 			$estimate_cd = $this->request->query['estimate_cd'];
 			$dojin = $this->request->query['dojin'];
 				$this->set('estimate_cd', $estimate_cd);
 				$this->set('dojin', $dojin);
-				//echo $estimate_cd;
 			$options = array('conditions' => array('DOrderEstimate.' .$this->DOrderEstimate->primaryKey => $estimate_cd));
-
-//			$temp = $this->DOrderEstimate->find('first', $options);
-//			$this->set('hoge', $this->DOrderEstimate->find('first', $options));
 			//見積もりデータが存在していない場合
 				if (empty($this->DOrderEstimate->find('first', $options))){
-//					//エラー画面表示
+					//エラー画面表示
 					$this->Flash->error(__('この見積もりは無効です。'));
 					$this->redirect('error');
 				}else {
 					$this->set('cart', $this->DOrderEstimate->find('first', $options));
 //					//確認画面表示
-//					$this->set('hoge', $temp);
-					return 0;
+//					return 0;
 			}
 		}
 	}

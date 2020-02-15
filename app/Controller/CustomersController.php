@@ -56,18 +56,30 @@ class CustomersController extends AppController {
 		}
 	}
 
+
+	//ajaxテスト用
+	public function hogehoge(){
+		$this->autoRender = false;
+		return 'hogehoge';
+	}
+
+
 	public function nekoin(){
+
+
+		$this->set('api_url',API_URL);
+
 		$this->set('select1', $this->Customer->find('list', array(
 				'fields' => array('id', 'customer_name')
 		)));
 
 		$id = 'あｆｋ';
 		$this->set('color', $id);
-		$test1 = $this->request->data('Customer.test1');
+		$test1 = $this->request->data('Nekoin');
 //		$test2 = $this->request->data('Customer.test2');
-		$test2 = $this->request->query['test2'];
+//		$test2 = $this->request->query['Nekoin'];
 
-
+//		var_dump($test1);
 //		$tempdate = $this->_after_estimate();
 
 //		$sha256 = Security::hash('CakePHP Framework', 'sha256', true);
@@ -86,8 +98,8 @@ class CustomersController extends AppController {
 //		$pass = $this->Customer->find('all', array('conditions' => array('customer_name' => $username)));
 //		$pass2 = $pass['0']['Customer']['password'];
 
-		echo "POSTで送られてきたのは". $test1. "<br>"; //.$test2 ."<br>";
-		echo "GETで送られてきたのは". var_dump($test2). "<br>"; //.$test2 ."<br>";
+//		echo "POSTで送られてきたのは". $test1. "<br>"; //.$test2 ."<br>";
+//		echo "GETで送られてきたのは". var_dump($test2). "<br>"; //.$test2 ."<br>";
 
 //		echo "いろいろ取ってみる ".$this->Session->read('Neko.longinReferer')."<br>";//$this->request->referer('/')."<br>";
 //		echo "POSTしたPWのハッシュ化 ".Security::hash($this->request->data('Customer.password'),'sha256',true)."<br>";

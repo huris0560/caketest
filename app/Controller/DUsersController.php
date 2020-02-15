@@ -36,14 +36,12 @@ class DUsersController extends AppController {
 			$options = array('conditions' => array('DOrderEstimate.' .'estimate_no' => $estimate_cd));
 			$orderestimate = $this->DOrderEstimate->find('first', $options);
 			$user_cd = $orderestimate['DOrderEstimate']['user_cd'];
-
 			//見積もりデータが存在していない場合
 			if (empty($this->DOrderEstimate->find('first', $options))){//見積もりデータが存在していない場合
 			//エラー画面表示
 				$this->Flash->error(__('この見積もりは無効です。'));
 				$this->redirect('error');
 			}else {//見積もりが存在しているので情報取得
-
 			//確認画面表示
 				return 0;
 			}
@@ -52,13 +50,7 @@ class DUsersController extends AppController {
 
 
 	public function dojinordercheck(){
-
-
-//		$cart = $this->request->data('cart');
-//		var_dump($cart);
-
 		//ログインチェック※確認中は殺す
-
 		//$this->_neko_auth();
 		//モデル読み込み
 		$this->loadModel("DOrderEstimate");
@@ -72,8 +64,12 @@ class DUsersController extends AppController {
 			$pay_method = $cart['pay_mathod'];
 			if($pay_method == '9'){
 				$pay_method_text = '銀行振込';
+				$this->set('pay_method', 'bankpay');
+				$this->set('nextaction', 'bankpay');
 			}elseif ($pay_method == '1'){
 				$pay_method_text = 'クレジットカード決済';
+				$this->set('pay_method', 'creditpay');
+				$this->set('nextaction', 'creditpay');
 			}else {
 				$pay_method_text = 'エラー処理入れる';
 			}
@@ -96,9 +92,6 @@ class DUsersController extends AppController {
 				$user_cd = $orderestimate['DOrderEstimate']['user_cd'];
 				//viewにわたす
 				$this->set('cart' , $orderestimate);
-
-//				echo $pay_method_text;
-//				var_dump($orderestimate);
 
 				//確認画面表示
 				return 0;
